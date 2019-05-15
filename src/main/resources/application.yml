@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: '@project.artifactId@'
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database: h2
+    open-in-view: false
+    show-sql: true
+project:
+  name: '@project.artifactId@'
+  description: '@project.description@'
+  version: '@project.version@'
