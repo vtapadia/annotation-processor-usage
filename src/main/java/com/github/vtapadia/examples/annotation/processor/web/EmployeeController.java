@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.Objects;
+import java.util.stream.Stream;
+
 @RestController
 @RequestMapping(value = "/api/v1/employee",
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -24,5 +27,13 @@ public class EmployeeController {
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDto> getEmployee(@PathVariable("id") Long id) {
         return employeeService.find(id).map(ResponseEntity::ok).orElseThrow(() -> new RuntimeException("EntityNotFound"));
+    }
+
+    @GetMapping
+    public ResponseEntity<EmployeeDto> searchEmployee(@RequestParam(value = "name", required = false) String name,
+                                                      @RequestParam(value = "company", required = false) String company,
+                                                      @RequestParam(value = "age", required = false) Integer age) {
+        Stream.of(name, company, age).filter(Objects::nonNull).findFirst().orElseThrow(IllegalArgumentException::new);
+        return employeeService.search(name, company, age).map(ResponseEntity::ok).orElseThrow(() -> new RuntimeException("EntityNotFound"));
     }
 }
